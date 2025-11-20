@@ -41,4 +41,27 @@ class AuthControllerTest extends TestCase
             ]);
         
     }
+
+    #[Test]
+    public function user_can_login()
+    {
+        //Arrange
+        $user = \App\Models\User::factory()->create([
+            'email' => 'testuser@example.com',
+            'password' => bcrypt('password')
+        ]);
+
+        $credentials = [
+            'email' => 'testuser@example.com',
+            'password' => 'password'
+        ];
+
+        //Act
+        $response = $this->postJson('/api/login', $credentials);
+        //Assert
+        $response->assertStatus(200)->assertJsonStructure(['access_token','token_type']);
+    }
+
+
+    
 }
