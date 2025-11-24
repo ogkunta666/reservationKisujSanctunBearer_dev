@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use App\Models\User;
 
 class AuthControllerTest extends TestCase
 {
@@ -48,7 +49,7 @@ class AuthControllerTest extends TestCase
         //Arrange
         $user = \App\Models\User::factory()->create([
             'email' => 'testuser@example.com',
-            'password' => bcrypt('password')
+            'password' => 'password'
         ]);
 
         $credentials = [
@@ -62,6 +63,19 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(200)->assertJsonStructure(['access_token','token_type']);
     }
 
+    #[Test]
 
+    public function user_can_logout(){
+
+        // Arrange
+        $user = User::factory()->create();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Act
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])->postJson('/api/logout');
+
+        // Assert
+        $response->assertStatus(200)->assertJson(['message' => 'Logged out successfully']);
+    }
     
 }

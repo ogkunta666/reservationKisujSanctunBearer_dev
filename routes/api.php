@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->patch('/reservations/{id}',[ReservationContro
 Route::middleware('auth:sanctum')->delete('/reservations/{id}',[ReservationController::class, 'destroy']); // egy foglalás törlése
 */
 Route::middleware('auth:sanctum')->group(function(){
-    Route::post('/logout',[ReservationController::class, 'logout']);
+    Route::post('/logout',[AuthController::class, 'logout']);
     Route::apiResource('reservations', ReservationController::class);
     
 });
